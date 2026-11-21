@@ -1,7 +1,7 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-only -->
 <!-- SPDX-FileCopyrightText: Copyright (C) 2026 mplx <mplx@jennifer-lang.dev> -->
 
-# @mplx/xformat
+# @mplx/texttransform
 
 Text transformations in the style of `printf`'s modifiers: case
 conversions (snake, kebab, camel, pascal, constant, leet, ...), slicing,
@@ -20,10 +20,10 @@ presentation modifier on its typed arguments, and the transformed parts
 are plain strings.
 
 ```jennifer
-import "@mplx/xformat/" as xformat;
+import "@mplx/texttransform/" as texttransform;
 
-io.printf("%s=%d\n", xformat.t("max retries", "case=constant"), 3);   # MAX_RETRIES=3
-io.printf("[%s]\n", xformat.t($title, "squash|truncate=30"));
+io.printf("%s=%d\n", texttransform.t("max retries", "case=constant"), 3);   # MAX_RETRIES=3
+io.printf("[%s]\n", texttransform.t($title, "squash|truncate=30"));
 ```
 
 A user function cannot take a variable number of arguments of different
@@ -89,4 +89,4 @@ characters.
 A spec is strict: an empty spec, an unknown modifier (names are case
 sensitive), a value on a modifier that takes none or none where one is
 needed, a malformed number, or a slice outside the text throws
-`Error{kind: "xformat"}`. Nothing is guessed.
+`Error{kind: "texttransform"}`. Nothing is guessed.

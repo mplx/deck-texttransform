@@ -1,8 +1,8 @@
-# @mplx/xformat
+# @mplx/texttransform
 
-[![test](https://github.com/mplx/deck-xformat/actions/workflows/test.yml/badge.svg)](https://github.com/mplx/deck-xformat/actions/workflows/test.yml)
-[![Documentation](https://img.shields.io/badge/docs-github%20pages-blue)](https://mplx.github.io/deck-xformat/)
-[![release](https://img.shields.io/github/v/release/mplx/deck-xformat)](https://github.com/mplx/deck-xformat/releases/latest)
+[![test](https://github.com/mplx/deck-texttransform/actions/workflows/test.yml/badge.svg)](https://github.com/mplx/deck-texttransform/actions/workflows/test.yml)
+[![Documentation](https://img.shields.io/badge/docs-github%20pages-blue)](https://mplx.github.io/deck-texttransform/)
+[![release](https://img.shields.io/github/v/release/mplx/deck-texttransform)](https://github.com/mplx/deck-texttransform/releases/latest)
 
 Text transformations in the style of `printf`'s modifiers for
 [Jennifer](https://jennifer-lang.dev/) programs: case conversions (snake,
@@ -11,24 +11,24 @@ trimming and folding, written as a `|`-separated spec such as
 `trim|fold|case=kebab`. It composes with `io.sprintf`, which keeps its own
 verbs and presentation modifiers.
 
-**[Documentation](https://mplx.github.io/deck-xformat/)**
+**[Documentation](https://mplx.github.io/deck-texttransform/)**
 
 ## Install
 
 ```sh
-jvc add @mplx/xformat
+jvc add @mplx/texttransform
 ```
 
-This vendors the deck to `vendor/<scope>/xformat/`. Without `jvc`, unpack the
-`src/` subtree of a release archive (`<scope>-xformat-<version>.tar.gz`) there.
+This vendors the deck to `vendor/<scope>/texttransform/`. Without `jvc`, unpack the
+`src/` subtree of a release archive (`<scope>-texttransform-<version>.tar.gz`) there.
 
 ## Usage
 
 ```jennifer
-import "@mplx/xformat/" as xformat;
+import "@mplx/texttransform/" as texttransform;
 
-io.printf("%s=%d\n", xformat.t("max retries", "case=constant"), 3);   # MAX_RETRIES=3
-io.printf("%s\n", xformat.t("  Crème Brûlée  ", "trim|fold|case=kebab"));   # creme-brulee
+io.printf("%s=%d\n", texttransform.t("max retries", "case=constant"), 3);   # MAX_RETRIES=3
+io.printf("%s\n", texttransform.t("  Crème Brûlée  ", "trim|fold|case=kebab"));   # creme-brulee
 ```
 
 ## Requirements
@@ -39,7 +39,7 @@ Jennifer 0.26.0 or newer. No capability: pure string work.
 
 ```sh
 tools/check-all.sh                   # the full gate, as CI runs it
-jennifer test src/xformat_test.j      # the test overlay
+jennifer test src/texttransform_test.j      # the test overlay
 tools/check-docs.sh                  # docs against the code
 tools/pack.sh dist                   # build the release archive
 ```

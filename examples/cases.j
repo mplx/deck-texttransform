@@ -12,14 +12,14 @@
 use io;
 use os;
 
-import "../src/xformat.j" as xformat;
+import "../src/texttransform.j" as texttransform;
 
 def text as string init "jenniferDecks parseJSONFiles v2Fast";
 if (len(os.ARGS) > 1) {
     $text = os.ARGS[1];
 }
-io.printf("words: %v\n", xformat.words($text));
-for (def style in xformat.CASES) {
-    io.printf("%s: %s\n", $style, xformat.toCase($text, $style));
+io.printf("words: %v\n", texttransform.words($text));
+for (def style in texttransform.CASES) {
+    io.printf("%s: %s\n", $style, texttransform.toCase($text, $style));
 }
-io.printf("slug: %s\n", xformat.t($text, "fold|case=kebab|truncate=24"));
+io.printf("slug: %s\n", texttransform.t($text, "fold|case=kebab|truncate=24"));

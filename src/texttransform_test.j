@@ -3,7 +3,7 @@
 # pragma-jennifer-version: >=0.26.0
 
 /**
- * White-box tests for the entry module: jennifer test src/xformat_test.j
+ * White-box tests for the entry module: jennifer test src/texttransform_test.j
  */
 use io;
 use testing;

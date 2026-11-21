@@ -31,6 +31,10 @@ It deliberately leaves out the rest of the original "super-sprintf" idea:
   the format spec grows a parallel API to the libraries (`jennifer`'s
   technical notes, "printf data-transformation modifiers"). A deck is opt-in,
   so it can bring back the `case=` and `slice=` parts without that cost.
+- **The name says transformation.** `printf` presents, this deck transforms;
+  a name with "format" in it blurred that line. "text-transform" is the CSS
+  property for the same job (`uppercase`, `capitalize`), so the name reads
+  without explanation.
 - **A function that composes with `io.sprintf`.** A user function cannot
   take a variable number of arguments of mixed types (no variadics, no
   `any`, homogeneous lists), so the deck cannot offer its own
@@ -72,8 +76,8 @@ It deliberately leaves out the rest of the original "super-sprintf" idea:
 
 ## Errors
 
-Every error is a plain `Error` of kind `"xformat"` (`ERROR_KIND`) with a
-message starting `xformat: ` that names the offending part. The deck
+Every error is a plain `Error` of kind `"texttransform"` (`ERROR_KIND`) with a
+message starting `texttransform: ` that names the offending part. The deck
 reports only problems with the caller's spec, so there are no fields to
 carry and no struct.
 
@@ -86,7 +90,7 @@ case checks. Slice bounds are limited to nine digits.
 
 ## Testing and validation
 
-`src/xformat_test.j` covers `words` (acronyms, digits, separators,
+`src/texttransform_test.j` covers `words` (acronyms, digits, separators,
 non-Latin scripts), every case style, slices (negative and empty bounds, out
 of range), truncation, the other modifiers, chains, every strict-spec error,
 and composition with `io.sprintf`. `examples/cases.j` prints every case style

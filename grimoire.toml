@@ -1,7 +1,7 @@
-# Grimoire book configuration for the @mplx/xformat documentation.
+# Grimoire book configuration for the @mplx/texttransform documentation.
 
 [book]
-title = "@mplx/xformat"
+title = "@mplx/texttransform"
 description = "Text transformations in printf's modifier style: case conversions (snake, kebab, camel, pascal, leet, ...), slicing, truncation"
 language = "en"
 src = "docs"
@@ -18,10 +18,10 @@ navPosition = "left"
 tocPosition = "right"
 tocDepth = 3
 sectionNumbers = true
-titleUrl = "https://mplx.github.io/deck-xformat/"
-repoUrl = "https://github.com/mplx/deck-xformat"
+titleUrl = "https://mplx.github.io/deck-texttransform/"
+repoUrl = "https://github.com/mplx/deck-texttransform"
 repoLabel = "Source"
-editUrl = "https://github.com/mplx/deck-xformat/edit/main/docs/{path}"
+editUrl = "https://github.com/mplx/deck-texttransform/edit/main/docs/{path}"
 
 [highlight]
 enabled = true

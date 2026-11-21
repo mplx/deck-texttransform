@@ -12,19 +12,19 @@
  * composes with the real `io.sprintf`, so every verb and presentation
  * modifier keeps working on its typed argument:
  *
- *   io.printf("%s: %s\n", xformat.t($key, "case=constant"), xformat.t($title, "truncate=30"));
+ *   io.printf("%s: %s\n", texttransform.t($key, "case=constant"), texttransform.t($title, "truncate=30"));
  *
  * A character is what a reader sees as one: a letter with the combining
  * marks that follow it (`e` + U+0301 is one `é`), so slicing, truncating and
  * reversing never strip an accent from its letter.
  *
  * A spec is strict: an unknown modifier, a missing or malformed value, or a
- * slice outside the text throws `Error{kind: "xformat"}`.
+ * slice outside the text throws `Error{kind: "texttransform"}`.
  *
- * @module xformat
+ * @module texttransform
  * @example
- *   xformat.t("HTTPServer2Go", "case=snake");   # "http_server2_go"
- *   xformat.t("hello world", "case=pascal");    # "HelloWorld"
+ *   texttransform.t("HTTPServer2Go", "case=snake");   # "http_server2_go"
+ *   texttransform.t("hello world", "case=pascal");    # "HelloWorld"
  */
 use convert;
 use lists;
@@ -33,7 +33,7 @@ use regex;
 use strings;
 
 /** The `kind` of every error the deck throws. */
-export def const ERROR_KIND as string init "xformat";
+export def const ERROR_KIND as string init "texttransform";
 
 /** The modifiers a spec may use. */
 export def const MODIFIERS as list of string init [
@@ -80,12 +80,12 @@ def const LEET as map of string to string init {
 };
 
 /**
- * Throw an xformat error.
+ * Throw an texttransform error.
  *
  * @param message {string} what is wrong, without the prefix
  */
 func fail(message as string) {
-    throw Error{kind: ERROR_KIND, message: "xformat: " + $message};
+    throw Error{kind: ERROR_KIND, message: "texttransform: " + $message};
 }
 
 /**
@@ -156,7 +156,7 @@ func isLower(c as string) {
  * @param text {string} the text
  * @return {list of string} the words, in order; empty for a text with none
  * @example
- *   xformat.words("HTTPServer2Go-fast");   # ["HTTP", "Server2", "Go", "fast"]
+ *   texttransform.words("HTTPServer2Go-fast");   # ["HTTP", "Server2", "Go", "fast"]
  */
 export func words(text as string) {
     def cs as list of string init chars($text);
@@ -335,9 +335,9 @@ func leet(text as string) {
  * @param text {string} the text
  * @param style {string} one of `CASES`
  * @return {string} the converted text
- * @throws {Error} kind `"xformat"` for an unknown style
+ * @throws {Error} kind `"texttransform"` for an unknown style
  * @example
- *   xformat.toCase("user ID", "camel");   # "userId"
+ *   texttransform.toCase("user ID", "camel");   # "userId"
  */
 export func toCase(text as string, style as string) {
     if ($style == "upper") {
@@ -528,10 +528,10 @@ func modify(text as string, name as string, value as string, has as bool) {
  * @param text {string} the text
  * @param spec {string} the modifiers, such as `case=kebab|truncate=20`
  * @return {string} the transformed text
- * @throws {Error} kind `"xformat"` for an empty spec, an unknown modifier, a
+ * @throws {Error} kind `"texttransform"` for an empty spec, an unknown modifier, a
  *   missing or malformed value, or a slice outside the text
  * @example
- *   xformat.t("  Crème Brûlée  ", "trim|fold|case=kebab");   # "creme-brulee"
+ *   texttransform.t("  Crème Brûlée  ", "trim|fold|case=kebab");   # "creme-brulee"
  */
 export func t(text as string, spec as string) {
     if (strings.trim($spec) == "") {
