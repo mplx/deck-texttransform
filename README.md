@@ -6,7 +6,7 @@
 
 Text transformations in the style of `printf`'s modifiers for
 [Jennifer](https://jennifer-lang.dev/) programs: case conversions (snake,
-kebab, camel, pascal, constant, title, leet, ...), slicing, truncation,
+kebab, camel, pascal, constant, title, swap, leet, ...), slicing, truncation,
 trimming and folding, written as a `|`-separated spec such as
 `trim|fold|case=kebab`. It composes with `io.sprintf`, which keeps its own
 verbs and presentation modifiers.

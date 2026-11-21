@@ -53,11 +53,16 @@ It deliberately leaves out the rest of the original "super-sprintf" idea:
   (`HTTPServer` is `HTTP` and `Server`). Digits stay with the word before
   them. Case is what `strings.upper` / `strings.lower` change, so letters of
   any script count, and a script without case is one word per run.
-- **Two families of case styles.** `upper`, `lower`, `title`, `sentence` and
-  `leet` keep the text's characters and spacing. `snake`, `kebab`,
+- **Two families of case styles.** `upper`, `lower`, `title`, `sentence`,
+  `swap` and `leet` keep the text's characters and spacing. `snake`, `kebab`,
   `constant`, `dot`, `path`, `camel` and `pascal` rebuild the text from its
   words, so an acronym becomes `Http` in camel and pascal case.
-- **Characters, not bytes.** `slice` and `truncate` count characters.
+- **Characters, not bytes or code points.** A character is a code point
+  that is not a combining mark plus the marks after it (`\P{M}\p{M}*`), so
+  a decomposed `é` is one character everywhere: in `words`, the case
+  styles, `slice`, `truncate` and `reverse`. Full UAX #29 grapheme clusters
+  (emoji sequences, flags) need tables the core does not have yet (M29.26
+  in the interpreter's roadmap). `slice` and `truncate` count characters.
   `slice` is half-open with either side optional and negative bounds from
   the end. `truncate=N` counts `ELLIPSIS`
   (`...`) in N, so N must be more than 3.

@@ -19,7 +19,7 @@ A bad spec or style throws `Error{kind: "xformat"}`.
 | `ERROR_KIND` | `"xformat"` | the kind of every error |
 | `ELLIPSIS` | `"..."` | what `truncate=` puts at the end of a cut text |
 | `MODIFIERS` | `["case", "slice", "truncate", "trim", "squash", "fold", "reverse"]` | the modifiers a spec may use |
-| `CASES` | `["upper", "lower", "title", "sentence", "snake", "kebab", "camel", "pascal", "constant", "dot", "path", "leet"]` | the values `case=` takes |
+| `CASES` | `["upper", "lower", "title", "sentence", "snake", "kebab", "camel", "pascal", "constant", "dot", "path", "swap", "leet"]` | the values `case=` takes |
 
 ## Functions
 

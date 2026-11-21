@@ -65,7 +65,11 @@ func testCases() {
     testing.assertEqual(t("user ID", "case=camel"), "userId");
     testing.assertEqual(t("-- --", "case=snake"), "");
     testing.assertEqual(toCase("Größe ändern", "snake"), "größe_ändern");
-    testing.assertEqual(len(CASES), 12);
+    testing.assertEqual(t("alphaBETA", "case=swap"), "ALPHAbeta");
+    testing.assertEqual(t($text, "case=swap"), "JENNIFERdECKS PARSEjsonfILES V2fAST");
+    testing.assertEqual(t("Straße 12, ÄRGER", "case=swap"), "sTRAßE 12, ärger");
+    testing.assertEqual(t("漢字 Kanji", "case=swap"), "漢字 kANJI");
+    testing.assertEqual(len(CASES), 13);
     for (def c in CASES) {
         testing.assertEqual(toCase("abc", $c) != "", true);
     }
@@ -111,6 +115,23 @@ func testOtherModifiers() {
     testing.assertEqual(t("Crème Brûlée", "fold"), "Creme Brulee");
     testing.assertEqual(t("Grüße", "reverse"), "eßürG");
     testing.assertEqual(len(MODIFIERS), 7);
+}
+
+# Combining marks stay with their letter: "e" + U+0301 is one character.
+func testCombiningMarks() {
+    def s as string init "cafe\u0301 tre\u0300s";
+    testing.assertEqual(words($s), ["cafe\u0301", "tre\u0300s"]);
+    testing.assertEqual(t($s, "case=snake"), "cafe\u0301_tre\u0300s");
+    testing.assertEqual(t($s, "case=title"), "Cafe\u0301 Tre\u0300s");
+    testing.assertEqual(t($s, "case=swap"), "CAFE\u0301 TRE\u0300S");
+    testing.assertEqual(t($s, "reverse"), "se\u0300rt e\u0301fac");
+    testing.assertEqual(t($s, "slice=0:4"), "cafe\u0301");
+    testing.assertEqual(t($s, "slice=-2:"), "e\u0300s");
+    testing.assertEqual(t($s, "truncate=7"), "cafe\u0301...");
+    testing.assertContains(errorOf($s, "slice=0:10"), "outside a text of 9 characters");
+    # a mark with no letter before it is a character of its own
+    testing.assertEqual(t("\u0301ab", "reverse"), "ba\u0301");
+    testing.assertEqual(t("\u0301ab", "slice=0:1"), "\u0301");
 }
 
 func testChains() {

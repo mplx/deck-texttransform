@@ -14,6 +14,10 @@
  *
  *   io.printf("%s: %s\n", xformat.t($key, "case=constant"), xformat.t($title, "truncate=30"));
  *
+ * A character is what a reader sees as one: a letter with the combining
+ * marks that follow it (`e` + U+0301 is one `é`), so slicing, truncating and
+ * reversing never strip an accent from its letter.
+ *
  * A spec is strict: an unknown modifier, a missing or malformed value, or a
  * slice outside the text throws `Error{kind: "xformat"}`.
  *
@@ -55,6 +59,7 @@ export def const CASES as list of string init [
     "constant",
     "dot",
     "path",
+    "swap",
     "leet"
 ];
 
@@ -84,23 +89,40 @@ func fail(message as string) {
 }
 
 /**
- * Whether a character is a letter (any script).
+ * A text's characters: each code point that is not a combining mark, with
+ * the marks that follow it. Marks at the very start, with no character
+ * before them, form a character of their own. Not full Unicode grapheme
+ * clusters: emoji sequences and flags are still several characters.
+ *
+ * @param text {string} the text
+ * @return {list of string} the characters, in order
+ */
+func chars(text as string) {
+    def out as list of string init [];
+    for (def m in regex.findAll('\P{M}\p{M}*|\p{M}+', $text)) {
+        $out[] = $m.text;
+    }
+    return $out;
+}
+
+/**
+ * Whether a character is a letter (any script), with any marks on it.
  *
  * @param c {string} one character
  * @return {bool} true for a letter
  */
 func isLetter(c as string) {
-    return regex.matches('^\p{L}$', $c);
+    return regex.matches('^\p{L}\p{M}*$', $c);
 }
 
 /**
- * Whether a character is a decimal digit (any script).
+ * Whether a character is a decimal digit (any script), with any marks on it.
  *
  * @param c {string} one character
  * @return {bool} true for a digit
  */
 func isDigit(c as string) {
-    return regex.matches('^\p{Nd}$', $c);
+    return regex.matches('^\p{Nd}\p{M}*$', $c);
 }
 
 /**
@@ -137,7 +159,7 @@ func isLower(c as string) {
  *   xformat.words("HTTPServer2Go-fast");   # ["HTTP", "Server2", "Go", "fast"]
  */
 export func words(text as string) {
-    def cs as list of string init strings.chars($text);
+    def cs as list of string init chars($text);
     def out as list of string init [];
     def cur as list of string init [];
     def n as int init len($cs);
@@ -177,7 +199,8 @@ func capital(w as string) {
     if ($w == "") {
         return "";
     }
-    return strings.upper(strings.substring($w, 0, 1)) + strings.lower(strings.substring($w, 1));
+    def cs as list of string init chars($w);
+    return strings.upper($cs[0]) + strings.lower(strings.join($cs[1..], ""));
 }
 
 /**
@@ -230,7 +253,7 @@ func capitalised(text as string, camel as bool) {
 func titled(text as string) {
     def out as list of string init [];
     def start as bool init true;
-    for (def c in strings.chars($text)) {
+    for (def c in chars($text)) {
         if (isLetter($c) or isDigit($c)) {
             if ($start) {
                 $out[] = strings.upper($c);
@@ -255,10 +278,31 @@ func titled(text as string) {
 func sentence(text as string) {
     def out as list of string init [];
     def done as bool init false;
-    for (def c in strings.chars(strings.lower($text))) {
+    for (def c in chars(strings.lower($text))) {
         if (not $done and isLetter($c)) {
             $out[] = strings.upper($c);
             $done = true;
+        } else {
+            $out[] = $c;
+        }
+    }
+    return strings.join($out, "");
+}
+
+/**
+ * Swap case: upper-case letters lower case and lower-case ones upper case;
+ * everything else, a letter without case included, kept.
+ *
+ * @param text {string} the text
+ * @return {string} the text with its case swapped
+ */
+func swapped(text as string) {
+    def out as list of string init [];
+    for (def c in chars($text)) {
+        if (isUpper($c)) {
+            $out[] = strings.lower($c);
+        } elseif (isLower($c)) {
+            $out[] = strings.upper($c);
         } else {
             $out[] = $c;
         }
@@ -274,7 +318,7 @@ func sentence(text as string) {
  */
 func leet(text as string) {
     def out as list of string init [];
-    for (def c in strings.chars($text)) {
+    for (def c in chars($text)) {
         def k as string init strings.lower($c);
         if (maps.has(LEET, $k)) {
             $out[] = LEET[$k];
@@ -329,6 +373,9 @@ export func toCase(text as string, style as string) {
     if ($style == "pascal") {
         return capitalised($text, false);
     }
+    if ($style == "swap") {
+        return swapped($text);
+    }
     if ($style == "leet") {
         return leet($text);
     }
@@ -376,7 +423,7 @@ func sliced(text as string, spec as string) {
     if (len($parts) != 2) {
         fail("slice is START:END, got \"" + $spec + "\"");
     }
-    def cs as list of string init strings.chars($text);
+    def cs as list of string init chars($text);
     def n as int init len($cs);
     def from as int init bound($parts[0], $n, 0);
     def upto as int init bound($parts[1], $n, $n);
@@ -399,11 +446,11 @@ func truncated(text as string, spec as string) {
         fail("truncate is a number of characters, got \"" + $spec + "\"");
     }
     def most as int init convert.toInt($spec);
-    def e as int init len(strings.chars(ELLIPSIS));
+    def e as int init len(chars(ELLIPSIS));
     if ($most <= $e) {
         fail("truncate is more than " + convert.toString($e) + " characters, got " + $spec);
     }
-    def cs as list of string init strings.chars($text);
+    def cs as list of string init chars($text);
     if (len($cs) <= $most) {
         return $text;
     }
@@ -459,7 +506,7 @@ func modify(text as string, name as string, value as string, has as bool) {
         return strings.fold($text);
     }
     if ($name == "reverse") {
-        return strings.join(lists.reverse(strings.chars($text)), "");
+        return strings.join(lists.reverse(chars($text)), "");
     }
     return $text;
 }

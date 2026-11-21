@@ -59,9 +59,10 @@ For `"jenniferDecks parseJSONFiles v2Fast"`:
 | `constant` | `JENNIFER_DECKS_PARSE_JSON_FILES_V2_FAST` |
 | `dot` | `jennifer.decks.parse.json.files.v2.fast` |
 | `path` | `jennifer/decks/parse/json/files/v2/fast` |
+| `swap` | `JENNIFERdECKS PARSEjsonfILES V2fAST` |
 | `leet` | `j3nn1f3rD3ck5 p4r53J50NF1l35 v2F457` |
 
-`upper`, `lower`, `title`, `sentence` and `leet` keep the text's
+`upper`, `lower`, `title`, `sentence`, `swap` and `leet` keep the text's
 characters and spacing. The joined styles (`snake` to `path`) rebuild
 the text from its words, which `words` shows: anything that is neither a
 letter nor a digit separates words, and a word also ends where a lower-case
@@ -72,6 +73,16 @@ count; a script without case (`漢字`) is one word per run.
 
 `leet` replaces a, b, e, g, i, o, s, t and z (either case) with 4, 8, 3,
 6, 1, 0, 5, 7 and 2.
+
+## Characters
+
+A character is what a reader sees as one: a letter or digit together with
+the combining marks after it. `cafe\u0301` (an `e` followed by a combining
+acute accent, as macOS file names and some keyboards write `é`) is four
+characters, so `slice`, `truncate` and `reverse` never strip the accent
+from its letter, and `words` keeps it in its word. This is not Unicode's
+full grapheme clustering: an emoji sequence or a flag is still several
+characters.
 
 ## Errors
 
