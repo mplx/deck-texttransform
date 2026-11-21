@@ -61,7 +61,7 @@ It deliberately leaves out the rest of the original "super-sprintf" idea:
   that is not a combining mark plus the marks after it (`\P{M}\p{M}*`), so
   a decomposed `é` is one character everywhere: in `words`, the case
   styles, `slice`, `truncate` and `reverse`. Full UAX #29 grapheme clusters
-  (emoji sequences, flags) need tables the core does not have yet (M29.26
+  (emoji sequences, flags) need tables the core does not have yet (M30.19
   in the interpreter's roadmap). `slice` and `truncate` count characters.
   `slice` is half-open with either side optional and negative bounds from
   the end. `truncate=N` counts `ELLIPSIS`
