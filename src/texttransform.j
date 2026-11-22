@@ -544,8 +544,8 @@ export func t(text as string, spec as string) {
         def has as bool init false;
         def eq as int init strings.indexOf($part, "=");
         if ($eq >= 0) {
-            $name = strings.substring($part, 0, $eq);
-            $value = strings.substring($part, $eq + 1);
+            $name = $part[..$eq];
+            $value = $part[$eq + 1..];
             $has = true;
         }
         if ($name == "") {
