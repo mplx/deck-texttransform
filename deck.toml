@@ -1,6 +1,6 @@
 [package]
 name = "@mplx/texttransform"
-version = "0.3.0"
+version = "0.4.0"
 description = "Text transformations in printf's modifier style: case conversions (snake, kebab, camel, pascal, leet, ...), slicing, truncation"
 license = "LGPL-3.0-only"
 authors = ["mplx <mplx@jennifer-lang.dev>"]
