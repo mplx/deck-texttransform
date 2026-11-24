@@ -78,7 +78,7 @@ count; a script without case (`漢字`) is one word per run.
 
 A character is what a reader sees as one: a letter or digit together with
 the combining marks after it. `cafe\u0301` (an `e` followed by a combining
-acute accent, as macOS file names and some keyboards write `é`) is four
+acute accent, as macOS™ file names and some keyboards write `é`) is four
 characters, so `slice`, `truncate` and `reverse` never strip the accent
 from its letter, and `words` keeps it in its word. This is not Unicode's
 full grapheme clustering: an emoji sequence or a flag is still several
@@ -90,3 +90,10 @@ A spec is strict: an empty spec, an unknown modifier (names are case
 sensitive), a value on a modifier that takes none or none where one is
 needed, a malformed number, or a slice outside the text throws
 `Error{kind: "texttransform"}`. Nothing is guessed.
+
+## Trademarks
+
+macOS™ is a trademark of Apple Inc., named here only to describe how its file
+names write accents. Other product and company names may be trademarks of
+their respective owners. This deck is an independent project, not affiliated
+with, sponsored or endorsed by Apple Inc.
